@@ -8,7 +8,7 @@ Instead of training directly on a real robot (which is slow, risky, and expensiv
 
 ## Requirements
 
-- **Unity**: e.g. 202x.x.x (any version that supports the ML-Agents package you use)
+- **Unity**: e.g. 6000x.x.x (any version that supports the ML-Agents package you use)
 - **Unity ML-Agents package** in the project
 - **Python 3.10**  
 - Recommended: **Conda** (Anaconda or Miniconda)
