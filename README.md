@@ -9,8 +9,8 @@ Instead of training directly on a real robot (which is slow, risky, and expensiv
 ## Requirements
 
 - **Unity**: e.g. 6000x.x.x (any version that supports the ML-Agents package you use)
-- **Unity ML-Agents package** in the project
-- **Python 3.10**  
+- **Unity ML-Agents package** [From this github](https://github.com/Unity-Technologies/ml-agents)
+- **Python 3.xx**  
 - Recommended: **Conda** (Anaconda or Miniconda)
 - GPU with CUDA support (optional but nice to have)
 
