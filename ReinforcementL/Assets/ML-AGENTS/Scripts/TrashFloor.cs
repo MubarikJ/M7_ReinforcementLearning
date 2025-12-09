@@ -9,7 +9,7 @@ public class TrashFloor : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Trash"))
         {
-            // How far was the agent from the trash at impact?
+            
             Vector3 tp = collision.transform.position;
             Vector3 ap = agent.transform.position;
 
@@ -18,7 +18,7 @@ public class TrashFloor : MonoBehaviour
             float dist = Vector2.Distance(t2, a2);
 
             float t = Mathf.Clamp01(dist / maxRewardDistance);
-            float reward = Mathf.Lerp(1f, -1f, t); // 1 if on top, -1 if far away
+            float reward = Mathf.Lerp(1f, -1f, t); 
 
             agent.AddReward(reward);
             agent.EndEpisode();

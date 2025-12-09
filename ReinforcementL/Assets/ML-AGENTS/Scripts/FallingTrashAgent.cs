@@ -19,7 +19,13 @@ public class FallingTrashAgent : Agent
     [SerializeField] private float areaHalfSize = 4f;
     [SerializeField] private float spawnHeight = 4f;
     [SerializeField] private float horizontalSpeed = 5f;
-    [SerializeField] private Transform areaCenter;  
+    [SerializeField] private Transform areaCenter;
+
+
+    [SerializeField] private Transform[] eyes;   
+    [SerializeField] private float eyeRayLength = 5f;
+   
+
 
     private float _prevHorizontalDist;
     private Rigidbody _rb;
@@ -133,6 +139,9 @@ public class FallingTrashAgent : Agent
         // Agent horizontal velocity (normalized)
         sensor.AddObservation(_rb.linearVelocity.x / 10f);
         sensor.AddObservation(_rb.linearVelocity.z / 10f);
+
+        bool trashAbove = IsTrashAbove();
+        sensor.AddObservation(trashAbove ? 1f : 0f);
     }
 
     private bool TrashOutOfBounds()
@@ -179,7 +188,12 @@ public class FallingTrashAgent : Agent
             _prevHorizontalDist = dist;
         }
 
-        // small time penalty to encourage finishing
+        if (IsTrashAbove())
+        {
+            AddReward(0.001f); 
+        }
+
+        
         AddReward(-0.0005f);
 
         if (TrashOutOfBounds())
@@ -189,14 +203,43 @@ public class FallingTrashAgent : Agent
         }
     }
 
-    // Called by catch zone trigger when trash enters bin
+    private bool IsTrashAbove()
+    {
+        if (eyes == null || eyes.Length == 0) return false;
+
+        foreach (var eye in eyes)
+        {
+            if (eye == null) continue;
+
+            Vector3 origin = eye.position;
+            Vector3 dir = Vector3.up; // straight up
+
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, eyeRayLength))
+            {
+                if (hit.collider.CompareTag("Trash"))
+                {
+                    Debug.DrawRay(origin, dir * hit.distance, Color.green);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    
+
+
+
+
+
+    
     public void OnCaughtTrash()
     {
         AddReward(+1.5f);
         EndEpisode();
     }
 
-    // Called by floor script when trash hits the floor
+    
     public void OnMissedTrash()
     {
         AddReward(-1.0f);
